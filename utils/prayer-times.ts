@@ -1,4 +1,4 @@
-import { PrayerTimes, type Coordinates, CalculationMethod } from "adhan"
+import { PrayerTimes, type Coordinates, CalculationMethod, type CalculationParameters } from "adhan"
 import type { PrayerTime } from "@/types/prayer"
 
 const PRAYER_NAMES_BENGALI: Record<string, string> = {
@@ -12,10 +12,10 @@ const PRAYER_NAMES_BENGALI: Record<string, string> = {
 export function calculatePrayerTimes(
   coordinates: Coordinates,
   date: Date = new Date(),
-  calculationMethod: CalculationMethod = CalculationMethod.MoonsightingCommittee(),
+  calculationMethod: () => CalculationParameters = CalculationMethod.MoonsightingCommittee,
   adjustments: Record<string, number> = {},
 ): PrayerTime[] {
-  const params = calculationMethod
+  const params = calculationMethod()
   Object.entries(adjustments).forEach(([prayer, minutes]) => {
     params.adjustments[prayer as keyof typeof params.adjustments] = minutes
   })
