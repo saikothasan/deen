@@ -1,7 +1,7 @@
 import { PrayerTimes, type Coordinates, CalculationMethod, type CalculationParameters } from "adhan"
-import type { PrayerTime } from "@/types/prayer"
+import type { PrayerTime, PrayerName } from "@/types/prayer"
 
-const PRAYER_NAMES_BENGALI: Record<string, string> = {
+const PRAYER_NAMES_BENGALI: Record<PrayerName, string> = {
   fajr: "ফজর",
   dhuhr: "যোহর",
   asr: "আসর",
@@ -13,18 +13,20 @@ export function calculatePrayerTimes(
   coordinates: Coordinates,
   date: Date = new Date(),
   calculationMethod: () => CalculationParameters = CalculationMethod.MoonsightingCommittee,
-  adjustments: Record<string, number> = {},
+  adjustments: Partial<Record<PrayerName, number>> = {},
 ): PrayerTime[] {
   const params = calculationMethod()
   Object.entries(adjustments).forEach(([prayer, minutes]) => {
-    params.adjustments[prayer as keyof typeof params.adjustments] = minutes
+    if (minutes !== undefined) {
+      params.adjustments[prayer as keyof typeof params.adjustments] = minutes
+    }
   })
 
   const prayerTimes = new PrayerTimes(coordinates, date, params)
 
-  return ["fajr", "dhuhr", "asr", "maghrib", "isha"].map((prayer) => ({
-    name: prayer as PrayerTime["name"],
-    time: prayerTimes[prayer as keyof PrayerTimes],
+  return (Object.keys(PRAYER_NAMES_BENGALI) as PrayerName[]).map((prayer) => ({
+    name: prayer,
+    time: prayerTimes.timeForPrayer(prayer),
     nameInBengali: PRAYER_NAMES_BENGALI[prayer],
   }))
 }
