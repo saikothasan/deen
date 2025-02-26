@@ -2,12 +2,12 @@ import { create } from "zustand"
 import { persist } from "zustand/middleware"
 import type { LocationInfo } from "@/types/prayer"
 import { BANGLADESH_DISTRICTS } from "@/utils/location"
-import { CalculationMethod } from "adhan"
+import { CalculationMethod, type CalculationParameters } from "adhan"
 
 interface SettingsState {
   selectedLocation: LocationInfo
   notificationsEnabled: boolean
-  calculationMethod: (typeof CalculationMethod)[keyof typeof CalculationMethod]
+  calculationMethod: () => CalculationParameters
   adjustments: {
     fajr: number
     dhuhr: number
@@ -17,7 +17,7 @@ interface SettingsState {
   }
   setLocation: (location: LocationInfo) => void
   toggleNotifications: () => void
-  setCalculationMethod: (method: (typeof CalculationMethod)[keyof typeof CalculationMethod]) => void
+  setCalculationMethod: (method: () => CalculationParameters) => void
   setAdjustment: (prayer: keyof SettingsState["adjustments"], minutes: number) => void
 }
 
@@ -26,7 +26,7 @@ export const useSettings = create<SettingsState>()(
     (set) => ({
       selectedLocation: BANGLADESH_DISTRICTS[0],
       notificationsEnabled: false,
-      calculationMethod: CalculationMethod.MoonsightingCommittee(),
+      calculationMethod: CalculationMethod.MoonsightingCommittee,
       adjustments: {
         fajr: 0,
         dhuhr: 0,
