@@ -7,7 +7,7 @@ import { CalculationMethod } from "adhan"
 interface SettingsState {
   selectedLocation: LocationInfo
   notificationsEnabled: boolean
-  calculationMethod: CalculationMethod
+  calculationMethod: (typeof CalculationMethod)[keyof typeof CalculationMethod]
   adjustments: {
     fajr: number
     dhuhr: number
@@ -17,7 +17,7 @@ interface SettingsState {
   }
   setLocation: (location: LocationInfo) => void
   toggleNotifications: () => void
-  setCalculationMethod: (method: CalculationMethod) => void
+  setCalculationMethod: (method: (typeof CalculationMethod)[keyof typeof CalculationMethod]) => void
   setAdjustment: (prayer: keyof SettingsState["adjustments"], minutes: number) => void
 }
 
