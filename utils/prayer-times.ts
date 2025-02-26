@@ -24,11 +24,19 @@ export function calculatePrayerTimes(
 
   const prayerTimes = new PrayerTimes(coordinates, date, params)
 
-  return (Object.keys(PRAYER_NAMES_BENGALI) as PrayerName[]).map((prayer) => ({
-    name: prayer,
-    time: prayerTimes.timeForPrayer(prayer),
-    nameInBengali: PRAYER_NAMES_BENGALI[prayer],
-  }))
+  return (Object.keys(PRAYER_NAMES_BENGALI) as PrayerName[])
+    .map((prayer) => {
+      const time = prayerTimes.timeForPrayer(prayer)
+      if (time === null) {
+        return null
+      }
+      return {
+        name: prayer,
+        time: time,
+        nameInBengali: PRAYER_NAMES_BENGALI[prayer],
+      }
+    })
+    .filter((prayer): prayer is PrayerTime => prayer !== null)
 }
 
 export function getNextPrayer(prayerTimes: PrayerTime[]): PrayerTime | null {
