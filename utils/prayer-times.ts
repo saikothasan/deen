@@ -24,7 +24,7 @@ export function calculatePrayerTimes(
 
   return ["fajr", "dhuhr", "asr", "maghrib", "isha"].map((prayer) => ({
     name: prayer as PrayerTime["name"],
-    time: prayerTimes[prayer],
+    time: prayerTimes[prayer as keyof PrayerTimes],
     nameInBengali: PRAYER_NAMES_BENGALI[prayer],
   }))
 }
