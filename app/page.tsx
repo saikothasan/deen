@@ -10,7 +10,7 @@ import { QiblaDirection } from "@/components/qibla-direction"
 import { calculatePrayerTimes, getNextPrayer } from "@/utils/prayer-times"
 import { useSettings } from "@/store/settings"
 import type { PrayerTime } from "@/types/prayer"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 import { getIslamicDate } from "@/utils/islamic-date"
 import { Navigation } from "@/components/navigation"
 
